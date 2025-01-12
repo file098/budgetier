@@ -1,61 +1,101 @@
 <template>
-    <header class="header">
-        <nav class="">
-          <router-link to="/" class="nav-link">Home</router-link>
-          <router-link to="/transactions" class="nav-link">Transactions</router-link>
-          <router-link to="/report" class="nav-link">Reports</router-link>
-        </nav>
-        <div class="user-info">
-            <span class="username">{{ username }}</span>
-            <button @click="logout">Logout</button>
-            </div>
-    </header>
+  <header class="header">
+    <nav class="">
+      <router-link to="/" class="nav-link">Home</router-link>
+      <router-link to="/transactions" class="nav-link"
+        >Transactions</router-link
+      >
+      <router-link to="/report" class="nav-link">Reports</router-link>
+    </nav>
+    <div class="buttons">
+      <button @click="appStore.addExpenseDialogOpen = true">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="3em"
+          fill="currentColor"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M 256 16 Q 321 17 376 48 L 376 48 L 376 48 Q 431 80 464 136 Q 496 193 496 256 Q 496 319 464 376 Q 431 432 376 464 Q 321 495 256 496 Q 191 495 136 464 Q 81 432 48 376 Q 16 319 16 256 Q 16 193 48 136 Q 81 80 136 48 Q 191 17 256 16 L 256 16 Z M 256 512 Q 326 511 384 478 L 384 478 L 384 478 Q 442 444 478 384 Q 512 323 512 256 Q 512 189 478 128 Q 442 68 384 34 Q 326 1 256 0 Q 186 1 128 34 Q 70 68 34 128 Q 0 189 0 256 Q 0 323 34 384 Q 70 444 128 478 Q 186 511 256 512 L 256 512 Z M 248 352 Q 249 359 256 360 Q 263 359 264 352 L 264 264 L 264 264 L 352 264 L 352 264 Q 359 263 360 256 Q 359 249 352 248 L 264 248 L 264 248 L 264 160 L 264 160 Q 263 153 256 152 Q 249 153 248 160 L 248 248 L 248 248 L 160 248 L 160 248 Q 153 249 152 256 Q 153 263 160 264 L 248 264 L 248 264 L 248 352 L 248 352 Z"
+          />
+        </svg>
+      </button>
+      <button @click="logout">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="3em"
+          fill="currentColor"
+          viewBox="0 0 512 512"
+        >
+          <path
+            d="M 508.01556420233464 261.97665369649803 Q 512 256 508.01556420233464 250.02334630350194 L 372.54474708171205 114.55252918287938 L 372.54474708171205 114.55252918287938 Q 366.568093385214 110.56809338521401 360.591439688716 114.55252918287938 Q 356.60700389105057 120.52918287937743 360.591439688716 126.50583657587549 L 483.11284046692606 248.03112840466926 L 483.11284046692606 248.03112840466926 L 167.34630350194553 248.03112840466926 L 167.34630350194553 248.03112840466926 Q 160.37354085603113 249.0272373540856 159.3774319066148 256 Q 160.37354085603113 262.9727626459144 167.34630350194553 263.9688715953307 L 483.11284046692606 263.9688715953307 L 483.11284046692606 263.9688715953307 L 360.591439688716 385.4941634241245 L 360.591439688716 385.4941634241245 Q 356.60700389105057 391.47081712062254 360.591439688716 397.44747081712063 Q 366.568093385214 401.431906614786 372.54474708171205 397.44747081712063 L 508.01556420233464 261.97665369649803 L 508.01556420233464 261.97665369649803 Z M 183.284046692607 48.809338521400775 Q 190.2568093385214 47.81322957198444 191.25291828793775 40.840466926070036 Q 190.2568093385214 33.86770428015564 183.284046692607 32.8715953307393 L 87.65758754863813 32.8715953307393 L 87.65758754863813 32.8715953307393 Q 50.80155642023346 33.86770428015564 25.898832684824903 58.7704280155642 Q 0.9961089494163424 83.67315175097276 0 120.52918287937743 L 0 391.47081712062254 L 0 391.47081712062254 Q 0.9961089494163424 428.32684824902725 25.898832684824903 453.2295719844358 Q 50.80155642023346 478.13229571984436 87.65758754863813 479.1284046692607 L 183.284046692607 479.1284046692607 L 183.284046692607 479.1284046692607 Q 190.2568093385214 478.13229571984436 191.25291828793775 471.15953307392994 Q 190.2568093385214 464.18677042801556 183.284046692607 463.1906614785992 L 87.65758754863813 463.1906614785992 L 87.65758754863813 463.1906614785992 Q 56.778210116731515 462.1945525291829 36.856031128404666 442.27237354085605 Q 16.93385214007782 422.35019455252916 15.937743190661479 391.47081712062254 L 15.937743190661479 120.52918287937743 L 15.937743190661479 120.52918287937743 Q 16.93385214007782 89.64980544747081 36.856031128404666 69.72762645914396 Q 56.778210116731515 49.80544747081712 87.65758754863813 48.809338521400775 L 183.284046692607 48.809338521400775 L 183.284046692607 48.809338521400775 Z"
+          />
+        </svg>
+      </button>
+    </div>
+  </header>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
-import { useAuthStore } from '@/stores/authStore';
+<script setup lang="ts">
+import { useAppStore } from "@/stores/appStore";
+import { useAuthStore } from "@/stores/authStore";
+import { onMounted } from "vue";
 
 const authStore = useAuthStore();
-const username = ref('');
+const appStore = useAppStore();
 
 function logout() {
-    console.log('User logged out');
-    authStore.signOut();
+  authStore.signOut();
 }
 
-onMounted(() => {
-    username.value = authStore.currentUser?.email || '';
-});
+onMounted(() => {});
 </script>
 
 <style scoped lang="scss">
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+
+  & nav {
     display: flex;
-    justify-content: space-between;
-    padding: 1rem;
+    margin-left: 1rem;
+    gap: 1rem;
 
-    .nav-link {
-        margin-right: 1rem;
-        color: rgba(254, 254, 254, 0.8);
-        text-decoration: none;
+    & .nav-link {
+      color: rgba(254, 254, 254, 0.8);
+      text-decoration: none;
 
-        &:hover {
-            text-decoration: underline;
-        }
+      &:hover {
+        text-decoration: underline;
+      }
     }
-}
+  }
 
-button {
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  & .buttons {
+    display: flex;
+    align-items: center;
 
-    &:hover {
-        background-color: #0056b3;
+    & button {
+      padding: 0.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: none;
+      color: #eceff4;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0.25rem;
+
+      &:hover {
+        color: darken(#eceff4, 20%);
+        transition: all 0.3s ease;
+      }
     }
+  }
 }
 </style>
