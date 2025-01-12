@@ -3,8 +3,7 @@
         <nav class="">
           <router-link to="/" class="nav-link">Home</router-link>
           <router-link to="/transactions" class="nav-link">Transactions</router-link>
-          <router-link to="/categories" class="nav-link">Categories</router-link>
-          <router-link to="/reports" class="nav-link">Reports</router-link>
+          <router-link to="/report" class="nav-link">Reports</router-link>
         </nav>
         <div class="user-info">
             <span class="username">{{ username }}</span>

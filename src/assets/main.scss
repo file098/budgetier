@@ -1,20 +1,13 @@
-:root {
-    --color-text: #333;
-    --color-background: rgb(18, 18, 18);
-    --color-primary: rgb(254, 254, 254);
-    --color-secondary: #30c;
-    --color-accent: #f0c;
-    --color-error: #f00;
-    --color-warning: #f90;
-    --color-success: #090;
-    --color-info: #39f;
-}
+$text-color: rgba(255, 255, 255, 0.9);
+$background-color: rgba(18, 18, 18, 1);
 
 body {
     min-height: 100vh;
+    height: 100%;
+    width: 100%;
     margin: 0;
-    color: var(--color-text);
-    background: var(--color-background);
+    color: $text-color;
+    background: $background-color;
     transition:
         color 0.5s,
         background-color 0.5s;

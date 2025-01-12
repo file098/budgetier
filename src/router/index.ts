@@ -16,6 +16,26 @@ const router = createRouter({
       component: () => import('@/views/LoginView.vue'),
     },
     {
+      path: '/transactions',
+      name: 'transactions',
+      meta: { authRequired: true },
+      component: () => import('@/views/TransactionsView.vue'),
+      children: [
+        {
+          path: ':id',
+          name: 'transaction-detail',
+          meta: { authRequired: true },
+          component: () => import('@/components/TransactionDetail.vue'),
+        },
+      ],
+    },
+    {
+      path: '/report',
+      name: 'report',
+      meta: { authRequired: true },
+      component: () => import('@/views/ReportView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/',
     }
