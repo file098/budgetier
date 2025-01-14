@@ -10,9 +10,7 @@ import 'wave-ui/dist/wave-ui.css'
 
 const app = createApp(App)
 
-app.use(WaveUI, {
-    theme: 'dark' // Or 'light' or 'auto'.
-})
+app.use(WaveUI)
 app.use(createPinia())
 app.use(router)
 
