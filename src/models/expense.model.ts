@@ -7,3 +7,11 @@ export interface Expense {
     created_at: Date;
     category: Category;
 }
+
+export interface NewExpense {
+    amount: number;
+    description: string;
+    date: Date;
+    category: Category;
+}
+

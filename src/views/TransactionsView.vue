@@ -1,78 +1,120 @@
 <template>
-  <div class="transactions-container">
-    <div class="transactions-list">
-      <h1>Transactions</h1>
-      <div v-if="!loading">
-        <transition name="fade">
-          <ul>
-            <li v-for="transaction in transactions" :key="transaction.id">
-              <router-link :to="`/transactions/${transaction.id}`">
-                {{ transaction.description }}
-              </router-link>
-            </li>
-          </ul>
-        </transition>
+  <section class="transactions-container" @click.self="closeDetails">
+    <div class="transactions-grid" v-if="!loading">
+      <div
+        v-for="transaction in transactions"
+        :key="transaction.id"
+        class="transactions-row"
+        @click.stop="toggleDetails(transaction.id)"
+      >
+        <span
+          :style="{
+            backgroundColor: '#88c0d0',
+            width: '10px',
+            height: '10px',
+            borderRadius: '50%',
+            display: 'inline-block',
+          }"
+        ></span>
+        <span>{{
+          new Date(transaction.created_at).toLocaleDateString("en-GB")
+        }}</span>
+        <span>{{ transaction.category }}</span>
+        <span>{{ transaction.amount }}€</span>
+        <div
+          v-if="expandedTransaction === transaction.id"
+          class="transaction-details"
+          @click.stop
+        >
+          <!-- Add details you want to show when expanded -->
+          <p>Details for transaction {{ transaction.id }}</p>
+        </div>
       </div>
-      <ul v-if="loading" class="loading-skeleton">
-        <li class="skeleton-item" v-for="n in 1" :key="n" />
-      </ul>
     </div>
-    <div class="transaction-detail">
-      <router-view></router-view>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { Expenses } from "@/models/expenses";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useExpenses } from "@/composables/useExpenses";
+import type { Expense } from "@/models/expense.model";
 
-const transactions = ref<Expenses[]>([]);
+const transactions = ref<Expense[]>([]);
 const loading = ref(true);
 const { getExpenses } = useExpenses();
 
-onMounted(async () => {
+const expandedTransaction = ref<string | null>(null);
+
+const toggleDetails = (id: string) => {
+  expandedTransaction.value = expandedTransaction.value === id ? null : id;
+};
+
+const closeDetails = () => {
+  expandedTransaction.value = null;
+};
+
+const fetchTransactions = async () => {
   transactions.value = await getExpenses();
+  transactions.value.sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
   loading.value = false;
-  console.log(transactions.value);
+};
+
+fetchTransactions();
+
+onMounted(() => {
+  document.addEventListener("click", closeDetails);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", closeDetails);
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .transactions-container {
-  display: flex;
+  width: 100%;
+  padding: 0 1rem;
+
+  & .transactions-grid {
+    display: flex;
+    flex-flow: column;
+    gap: 1rem;
+
+    & .transactions-row {
+      display: grid;
+      grid-template-columns: 2rem 1fr 1fr 1fr;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      gap: 10px;
+      cursor: pointer;
+    }
+  }
 }
 
-.loading-skeleton {
+.transaction-details {
+  grid-column: 1 / -1;
   padding: 1rem;
+  border: 1px solid #bfbfbf;
+  border-radius: 5px;
 }
 
-.skeleton-item {
-  height: 20px;
-  background: #eee;
-  margin: 10px 0;
-  border-radius: 4px;
-  animation: pulse 1.5s infinite;
-}
+@media (max-width: 600px) {
+  .transactions-container {
+    padding: 0 0.5rem;
 
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
-  }
-}
+    & .transactions-row {
+      grid-template-columns: 1fr;
+      grid-gap: 0.5rem;
+      padding: 0.5rem 0;
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0;
+      & > span {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
 }
 </style>

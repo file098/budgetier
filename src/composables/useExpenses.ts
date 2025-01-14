@@ -1,92 +1,80 @@
-import { ref } from 'vue';
 import { supabase } from '@/lib/supabase';
+import type { Expense, NewExpense } from '@/models/expense.model';
 import { useAuthStore } from '@/stores/authStore';
-import type { Expense } from '@/models/expense.model';
 
 export function useExpenses() {
-    const authStore = useAuthStore();
+  const authStore = useAuthStore();
 
-    async function getExpenses(): Promise<Expense[] | undefined> {
-        try {
-            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  async function getExpenses(): Promise<Expense[]> {
+    try {
+      console.log(authStore.currentUser?.id);
+      
+      const { data, error } = await supabase
+        .from("expenses")
+        .select("*")
+        .eq("user_id", authStore.currentUser!.id);
 
-            if (sessionError) throw sessionError;
+      if (error) throw error;
+      console.log(data);
+      
 
-            const { data, error } = await supabase
-                .from("expenses")
-                .select("*")
-                .eq("user_id", authStore.currentUser!.id);
-
-            if (error) throw error;
-
-            return data as Expense[];
-        } catch (error) {
-            console.error("Error fetching expenses:", error);
-        }
+      return data;
+    } catch (error) {
+      console.error("Error fetching expenses:", error);
+      return [];
     }
+  }
 
-    async function addExpense(expense: Expense) {
-        try {
-            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  async function addExpense(expense: NewExpense) {
+    try {
+      const { data, error } = await supabase
+        .from("expenses")
+        .insert([{ ...expense, user_id: authStore.currentUser!.id }]);
 
-            if (sessionError) throw sessionError;
+      if (error) throw error;
 
-            const { data, error } = await supabase
-                .from("expenses")
-                .insert([{ ...expense, user_id: authStore.currentUser!.id }]);
-
-            if (error) throw error;
-
-            return data;
-        } catch (error) {
-            console.error("Error adding expense:", error);
-        }
+      return data;
+    } catch (error) {
+      console.error("Error adding expense:", error);
     }
+  }
 
-    async function updateExpense(id: string, updatedExpense: Expense) {
-        try {
-            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  async function updateExpense(id: string, updatedExpense: Expense) {
+    try {
+      const { data, error } = await supabase
+        .from("expenses")
+        .update(updatedExpense)
+        .eq("id", id)
+        .eq("user_id", authStore.currentUser!.id);
 
-            if (sessionError) throw sessionError;
+      if (error) throw error;
 
-            const { data, error } = await supabase
-                .from("expenses")
-                .update(updatedExpense)
-                .eq("id", id)
-                .eq("user_id", authStore.currentUser!.id);
-
-            if (error) throw error;
-
-            return data;
-        } catch (error) {
-            console.error("Error updating expense:", error);
-        }
+      return data;
+    } catch (error) {
+      console.error("Error updating expense:", error);
     }
+  }
 
-    async function deleteExpense(id: string) {
-        try {
-            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  async function deleteExpense(id: string) {
+    try {
+      const { data, error } = await supabase
+        .from("expenses")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", authStore.currentUser!.id);
 
-            if (sessionError) throw sessionError;
+      if (error) throw error;
 
-            const { data, error } = await supabase
-                .from("expenses")
-                .delete()
-                .eq("id", id)
-                .eq("user_id", authStore.currentUser!.id);
-
-            if (error) throw error;
-
-            return data;
-        } catch (error) {
-            console.error("Error deleting expense:", error);
-        }
+      return data;
+    } catch (error) {
+      console.error("Error deleting expense:", error);
     }
+  }
 
-    return {
-        getExpenses,
-        addExpense,
-        updateExpense,
-        deleteExpense
-    };
+  return {
+    getExpenses,
+    addExpense,
+    updateExpense,
+    deleteExpense
+  };
 }

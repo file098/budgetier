@@ -47,6 +47,8 @@ defineProps({
   border: 1px solid transparent;
   transition: border 0.3s ease;
   height: 300px;
+  max-width: 100%; 
+  box-sizing: border-box; // Include padding and border in the element's total width and height
 
   &--double {
     grid-column: span 2;
