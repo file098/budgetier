@@ -1,26 +1,67 @@
 <template>
-  <w-dialog v-model="appStore.addExpenseDialogOpen" :width="dialogWidth">
-    <ExpenseForm @submitted="appStore.addExpenseDialogOpen = false"/>
-  </w-dialog>
+  <Dialog.Root v-model:open="appStore.addExpenseDialogOpen">
+    <Teleport to="body">
+      <Dialog.Backdrop class="dialog-backdrop" />
+      <Dialog.Positioner class="dialog-positioner">
+        <Dialog.Content class="dialog-content">
+          <ExpenseForm />
+          <Dialog.CloseTrigger class="dialog-close">Close</Dialog.CloseTrigger>
+        </Dialog.Content>
+      </Dialog.Positioner>
+    </Teleport>
+  </Dialog.Root>
 </template>
 
 <script setup lang="ts">
-import { useExpenses } from "@/composables/useExpenses";
 import { useAppStore } from "@/stores/appStore";
-import { computed, ref } from "vue";
-import ExpenseForm from "../ExpenseForm.vue";
+import { Dialog } from "@ark-ui/vue/dialog";
+import ExpenseForm from "@/components/ExpenseForm.vue";
 
 const appStore = useAppStore();
-
-const dialogWidth = computed(() => {
-  return window.innerWidth < 600 ? "90%" : "50%";
-});
 </script>
 
 <style scoped lang="scss">
-form {
+@use "@/assets/colors" as *;
+
+.dialog-backdrop {
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dialog-positioner {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+.dialog-content {
+  background-color: $background-color;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 50vw;
+  margin: auto;
+  position: relative;
+}
+
+.dialog-close {
+  background-color: #f5f5f5;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.dialog-close:hover {
+  background-color: #e5e5e5;
 }
 </style>

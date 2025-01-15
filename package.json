@@ -11,13 +11,13 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@ark-ui/vue": "^4.8.0",
     "@supabase/supabase-js": "^2.47.12",
     "chart.js": "^4.4.7",
     "pinia": "^2.3.0",
     "vue": "^3.5.13",
     "vue-chartjs": "^5.3.2",
-    "vue-router": "^4.5.0",
-    "wave-ui": "^3.18.0"
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.0",

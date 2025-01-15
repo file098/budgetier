@@ -23,7 +23,7 @@ onMounted(async () => {
 <template>
   <Header v-if="route.path !== '/login'" />
   <RouterView :class="{ 'blur-background': appStore.addExpenseDialogOpen }" />
-  <AddExpenseDialog />
+  <AddExpenseDialog v-if="appStore.addExpenseDialogOpen" />
 </template>
 
 <style scoped>
