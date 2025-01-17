@@ -1,6 +1,6 @@
 <template>
   <section class="widget-container">
-    <Widget :loading="loading" :doubleWidth="true" :ignoreDoubleWidthOnMobile="true">
+    <Widget :loading="!dataStore.isInitialized" :doubleWidth="true" :ignoreDoubleWidthOnMobile="true">
       <template #header>
         <h1>Monthly Expenses</h1>
       </template>
@@ -8,7 +8,7 @@
         <Bar :options="chartOptions" :data="chartData" />
       </template>
     </Widget>
-    <Widget :loading="loading">
+    <Widget :loading="!dataStore.isInitialized">
       <template #header>
         <h1>Test</h1>
       </template>
@@ -16,7 +16,7 @@
         <Doughnut :options="donutOptions" :data="chartData" />
       </template>
     </Widget>
-    <Widget :loading="loading">
+    <Widget :loading="!dataStore.isInitialized">
       <template #header>
         <h1>Last transactions</h1>
       </template>
@@ -28,7 +28,7 @@
         </ul>
       </template>
     </Widget>
-    <Widget :loading="loading" :doubleWidth="true" :ignoreDoubleWidthOnMobile="true">
+    <Widget :loading="!dataStore.isInitialized" :doubleWidth="true" :ignoreDoubleWidthOnMobile="true">
       <template #header>
         <h1>Trends</h1>
       </template>
@@ -55,6 +55,7 @@ import {
   LineElement,
   PointElement,
 } from "chart.js";
+import { useDataStore } from "@/stores/dataStore";
 
 ChartJS.register(
   Title,
@@ -67,6 +68,8 @@ ChartJS.register(
   LineElement,
   PointElement
 );
+
+const dataStore = useDataStore();
 
 const transactions = ref([
   { id: 1, date: "2021-01-01", description: "Rent", amount: 1000 },
@@ -143,10 +146,6 @@ const lineOptions = ref({
     }
   }
 });
-
-setTimeout(() => {
-  loading.value = false;
-}, 2000);
 </script>
 
 <style scoped lang="scss">

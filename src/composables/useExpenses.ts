@@ -14,9 +14,8 @@ export function useExpenses() {
         .select("*")
         .eq("user_id", authStore.currentUser!.id);
 
+        console.log(data);
       if (error) throw error;
-      console.log(data);
-      
 
       return data;
     } catch (error) {

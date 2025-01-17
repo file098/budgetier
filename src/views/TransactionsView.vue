@@ -16,18 +16,15 @@
             display: 'inline-block',
           }"
         ></span>
-        <span>{{
-          new Date(transaction.created_at).toLocaleDateString("en-GB")
-        }}</span>
+        <span>{{ new Date(transaction.created_at).toLocaleDateString("en-GB") }}</span>
         <span>{{ transaction.category }}</span>
         <span>{{ transaction.amount }}€</span>
         <div
-          v-if="expandedTransaction === transaction.id"
           class="transaction-details"
+          :class="{ opened: expandedTransaction === transaction.id }"
           @click.stop
         >
-          <!-- Add details you want to show when expanded -->
-          <p>Details for transaction {{ transaction.id }}</p>
+          <TransactionDetail :transaction="transaction" />
         </div>
       </div>
     </div>
@@ -38,6 +35,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { useExpenses } from "@/composables/useExpenses";
 import type { Expense } from "@/models/expense.model";
+import TransactionDetail from "@/components/TransactionDetail.vue";
 
 const transactions = ref<Expense[]>([]);
 const loading = ref(true);
@@ -56,8 +54,7 @@ const closeDetails = () => {
 const fetchTransactions = async () => {
   transactions.value = await getExpenses();
   transactions.value.sort(
-    (a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
   loading.value = false;
 };
@@ -74,9 +71,9 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+
 .transactions-container {
   width: 100%;
-  padding: 0 1rem;
 
   & .transactions-grid {
     display: flex;
@@ -86,7 +83,7 @@ onUnmounted(() => {
     & .transactions-row {
       display: grid;
       grid-template-columns: 2rem 1fr 1fr 1fr;
-      align-items: center;
+      place-items: center;
       border-bottom: 1px solid #ccc;
       gap: 10px;
       cursor: pointer;
@@ -95,20 +92,23 @@ onUnmounted(() => {
 }
 
 .transaction-details {
+  width: 100%;
   grid-column: 1 / -1;
-  padding: 1rem;
-  border: 1px solid #bfbfbf;
-  border-radius: 5px;
+
+  height: 0;
+  overflow-y: clip;
+  transition: height 0.5s;
+  
+  &.opened {
+    height: auto;
+  }
 }
 
 @media (max-width: 600px) {
   .transactions-container {
-    padding: 0 0.5rem;
-
     & .transactions-row {
       grid-template-columns: 1fr;
       grid-gap: 0.5rem;
-      padding: 0.5rem 0;
 
       & > span {
         display: block;

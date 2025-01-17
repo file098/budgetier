@@ -1,4 +1,8 @@
-@use '@/assets/colors' as *;
+@use '@/assets/styles/colors' as *;
+
+html {
+  interpolate-size: allow-keywords;
+}
 
 body {
   min-height: 100vh;

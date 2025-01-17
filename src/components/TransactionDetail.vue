@@ -1,30 +1,21 @@
 <template>
   <div>
     <h1>Transaction Detail</h1>
-    <p>Transaction ID: {{ transactionId }}</p>
+    <p>Transaction ID: {{ transaction.id }}</p>
+    <p>Amount: {{ transaction.amount }}</p>
+    <p>Category: {{ transaction.category }}</p>
+    <p>Date: {{ transaction.created_at }}</p>
     <!-- Display additional transaction details here -->
   </div>
 </template>
 
 <script setup lang="ts">
+import type { Expense } from '@/models/expense.model';
 import { computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-const route = useRoute();
-const transactionId = computed(() => route.params.id);
+const props =  defineProps<{
+  transaction: Expense;
+}>();
 
-const loadTransactionDetails = () => {
-  console.log('Loading transaction:', transactionId.value);
-  // Fetch transaction details using the transactionId
-};
-
-onMounted(() => {
-  loadTransactionDetails();
-});
-
-// Watch for route changes
-watch(
-  () => route.params.id,
-  () => loadTransactionDetails()
-);
 </script>
