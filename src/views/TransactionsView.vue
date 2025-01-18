@@ -28,6 +28,9 @@
         </div>
       </div>
     </div>
+    <div class="transactions-grid" v-else>
+      <TransactionSkeleton v-for="n in 5" :key="n" />
+    </div>
   </section>
 </template>
 
@@ -36,6 +39,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { useExpenses } from "@/composables/useExpenses";
 import type { Expense } from "@/models/expense.model";
 import TransactionDetail from "@/components/TransactionDetail.vue";
+import TransactionSkeleton from "@/components/ui/skeletons/TransactionSkeleton.vue";
 
 const transactions = ref<Expense[]>([]);
 const loading = ref(true);
