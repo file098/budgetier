@@ -10,7 +10,7 @@
             <button class="close-button" @click="closeDialog">&times;</button>
           </header>
           <main class="dialog-body">
-            <slot></slot>
+            <slot name="body"></slot>
           </main>
           <footer class="dialog-footer">
             <slot name="footer"></slot>
@@ -29,7 +29,9 @@ const closeDialog = () => {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use "@/assets/styles/colors" as *;
+
 .dialog-overlay {
   position: fixed;
   top: 0;
@@ -37,7 +39,7 @@ const closeDialog = () => {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +47,7 @@ const closeDialog = () => {
 }
 
 .dialog-content {
-  background: white;
+  background: $background-color;
   border-radius: 8px;
   padding: 1rem;
   max-width: 500px;

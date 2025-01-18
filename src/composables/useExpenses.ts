@@ -7,14 +7,12 @@ export function useExpenses() {
 
   async function getExpenses(): Promise<Expense[]> {
     try {
-      console.log(authStore.currentUser?.id);
-      
+
       const { data, error } = await supabase
         .from("expenses")
         .select("*")
         .eq("user_id", authStore.currentUser!.id);
 
-        console.log(data);
       if (error) throw error;
 
       return data;

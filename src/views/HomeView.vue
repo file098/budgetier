@@ -21,11 +21,14 @@
         <h1>Last transactions</h1>
       </template>
       <template #content>
-        <ul>
-          <li v-for="transaction in transactions" :key="transaction.id">
-            {{ transaction.date }} - {{ transaction.description }} - ${{ transaction.amount }}
-          </li>
-        </ul>
+        <div v-if="hasTransactions">
+          <ul>
+            <li v-for="transaction in lastTransactions" :key="transaction.id">
+                {{ new Date(transaction.created_at).toLocaleDateString('en-GB') }} - {{ transaction.description }} - ${{ transaction.amount }}
+            </li>
+          </ul>
+        </div>
+        <p v-else>No transactions available</p>
       </template>
     </Widget>
     <Widget :loading="!dataStore.isInitialized" :doubleWidth="true" :ignoreDoubleWidthOnMobile="true">
@@ -40,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import Widget from "@/components/ui/Widget.vue";
 import { Bar, Doughnut, Line } from "vue-chartjs";
 import {
@@ -71,18 +74,31 @@ ChartJS.register(
 
 const dataStore = useDataStore();
 
-const transactions = ref([
-  { id: 1, date: "2021-01-01", description: "Rent", amount: 1000 },
-  { id: 2, date: "2021-01-02", description: "Food", amount: 100 },
-  { id: 3, date: "2021-01-03", description: "Gas", amount: 50 },
-]);
+const hasTransactions = computed(() => dataStore.transactionList.length > 0);
 
-const loading = ref(true);
+const lastTransactions = computed(() => 
+  hasTransactions.value ? dataStore.transactionList.slice(0, 5) : []
+);
+
+const categoryNames = computed(() => 
+  hasTransactions.value 
+    ? [...new Set(dataStore.transactionList.map(t => t.category))]
+    : ['No Data']
+);
+
+const categoryValues = computed(() => 
+  hasTransactions.value
+    ? categoryNames.value.map(name => 
+        dataStore.transactionList.filter(t => t.category === name).length
+      )
+    : [1]
+);
+
 const chartData = ref({
-  labels: ["January", "February", "March"],
+  labels: categoryNames,
   datasets: [
     {
-      data: [40, 20, 12],
+      data: categoryValues,
       backgroundColor: ["#88C0D0", "#81A1C1", "#5E81AC"],
     },
   ],
