@@ -1,36 +1,38 @@
 <template>
   <section class="transactions-container" @click.self="closeDetails">
-    <div class="transactions-grid" v-if="!loading">
-      <div
-        v-for="transaction in transactions"
-        :key="transaction.id"
-        class="transactions-row"
-        @click.stop="toggleDetails(transaction.id)"
-      >
-        <span
-          :style="{
-            backgroundColor: '#88c0d0',
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
-            display: 'inline-block',
-          }"
-        ></span>
-        <span>{{ new Date(transaction.created_at).toLocaleDateString("en-GB") }}</span>
-        <span>{{ transaction.category }}</span>
-        <span>{{ transaction.amount }}€</span>
+    <Transition name="fade" mode="out-in">
+      <div class="transactions-grid" v-if="!loading">
         <div
-          class="transaction-details"
-          :class="{ opened: expandedTransaction === transaction.id }"
-          @click.stop
+          v-for="transaction in transactions"
+          :key="transaction.id"
+          class="transactions-row"
+          @click.stop="toggleDetails(transaction.id)"
         >
-          <TransactionDetail :transaction="transaction" />
+          <span
+            :style="{
+              backgroundColor: '#88c0d0',
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              display: 'inline-block',
+            }"
+          ></span>
+          <span>{{ new Date(transaction.created_at).toLocaleDateString("en-GB") }}</span>
+          <span>{{ transaction.category }}</span>
+          <span>{{ transaction.amount }}€</span>
+          <div
+            class="transaction-details"
+            :class="{ opened: expandedTransaction === transaction.id }"
+            @click.stop
+          >
+            <TransactionDetail :transaction="transaction" />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="transactions-grid" v-else>
-      <TransactionSkeleton v-for="n in 5" :key="n" />
-    </div>
+      <div class="transactions-grid" v-else>
+        <TransactionSkeleton v-for="n in 5" :key="n" />
+      </div>
+    </Transition>
   </section>
 </template>
 
@@ -98,13 +100,17 @@ onUnmounted(() => {
 .transaction-details {
   width: 100%;
   grid-column: 1 / -1;
-
-  height: 0;
-  overflow-y: clip;
-  transition: height 0.5s;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-in-out;
+  overflow: hidden;
   
   &.opened {
-    height: auto;
+    grid-template-rows: 1fr;
+  }
+
+  & > * {
+    min-height: 0;
   }
 }
 
@@ -120,5 +126,15 @@ onUnmounted(() => {
       }
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

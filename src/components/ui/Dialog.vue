@@ -3,7 +3,7 @@
     v-model:visible="appStore.addExpenseDialogOpen"
     modal
     header="Add transaction"
-    :style="{ width: '25rem' }"
+    :style="{ width: '35rem', height: 'max-content' }"
     ><TransactionForm />
   </Dialog>
 </template>

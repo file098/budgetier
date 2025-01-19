@@ -11,8 +11,6 @@
 
 <script setup lang="ts">
 import type { Expense } from '@/models/expense.model';
-import { computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
 
 const props =  defineProps<{
   transaction: Expense;

@@ -1,67 +1,53 @@
 <template>
-  <div class="card flex justify-center">
-    <Toast />
-    <Form
-      v-slot="$form"
-      :initialValues
-      :resolver
-      @submit="onFormSubmit"
-      class="flex flex-col gap-4 w-full sm:w-56"
+  <Toast />
+  <Form v-slot="$form" :initialValues :resolver @submit="onFormSubmit" class="form">
+    <DatePicker name="date" />
+
+    <InputText name="description" type="text" placeholder="description" fluid />
+    <Message
+      v-if="$form.description?.invalid"
+      severity="error"
+      size="small"
+      variant="simple"
+      >{{ $form.description.error?.message }}</Message
     >
-      <DatePicker name="date" />
 
-      <div class="flex flex-col gap-1">
-        <InputText
-          name="description"
-          type="text"
-          placeholder="description"
-          fluid
-        />
-        <Message
-          v-if="$form.description?.invalid"
-          severity="error"
-          size="small"
-          variant="simple"
-          >{{ $form.description.error?.message }}</Message
-        >
-      </div>
+    <InputNumber
+      name="amount"
+      inputId="currency-germany"
+      mode="currency"
+      currency="EUR"
+      locale="de-DE"
+      fluid
+    />
 
-      <InputNumber
-        name="amount"
-        inputId="currency-germany"
-        mode="currency"
-        currency="EUR"
-        locale="de-DE"
-        fluid
-      />
+    <Message
+      v-if="$form.amount?.invalid"
+      severity="error"
+      size="small"
+      variant="simple"
+      >{{ $form.amount.error?.message }}</Message
+    >
 
-      <Message
-        v-if="$form.amount?.invalid"
-        severity="error"
-        size="small"
-        variant="simple"
-        >{{ $form.amount.error?.message }}</Message
-      >
+    <Select
+      v-model="initialValues.category"
+      name="category"
+      :options="dataStore.categoryNames"
+      placeholder="Select a category or create one"
+      editable
+      size="large"
+    />
 
-      <Select
-        v-model="initialValues.category"
-        name="category"
-        :options="dataStore.categoryNames"
-        placeholder="Select a category or create one"
-        editable
-      />
+    <Message
+      v-if="$form.category?.invalid"
+      severity="error"
+      size="small"
+      variant="simple"
+      >{{ $form.category.error?.message }}</Message
+    >
 
-      <Message
-        v-if="$form.category?.invalid"
-        severity="error"
-        size="small"
-        variant="simple"
-        >{{ $form.category.error?.message }}</Message
-      >
-
-      <Button type="submit" severity="secondary" label="Submit" />
-    </Form>
-  </div>
+    <Button type="submit" severity="secondary" label="Submit" />
+  </Form>
 </template>
 
 <script setup lang="ts">
@@ -122,3 +108,12 @@ const onFormSubmit = (form: any) => {
   }
 };
 </script>
+
+<style scoped lang="scss">
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+</style>
