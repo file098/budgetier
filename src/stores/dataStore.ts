@@ -1,9 +1,9 @@
-import type { Expense } from '@/models/expense.model';
+import type { Transaction } from '@/models/transaction.model';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 export const useDataStore = defineStore('dataStore', () => {
-    const transactionList = ref<Expense[]>([]);
+    const transactionList = ref<Transaction[]>([]);
     const isInitialized = ref(false);
 
     const categoryNames = computed(() =>
@@ -11,7 +11,7 @@ export const useDataStore = defineStore('dataStore', () => {
 
     );
 
-    const setTransactions = (transactions: Expense[]) => {
+    const setTransactions = (transactions: Transaction[]) => {
         transactionList.value = transactions;
     };
 

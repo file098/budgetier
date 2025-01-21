@@ -1,13 +1,13 @@
 import { useDataStore } from '@/stores/dataStore';
-import { useExpenses } from './useExpenses';
+import { useTransactions } from './useTransactions';
 
 export const useInitialize = () => {
     const dataStore = useDataStore();
-    const { getExpenses } = useExpenses();
+    const { getTransactions } = useTransactions();
 
     const initializeApp = async () => {
         try {
-            const expenses = await getExpenses();
+            const expenses = await getTransactions();
             dataStore.setTransactions(expenses);
             return true;
         } catch (error) {

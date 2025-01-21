@@ -5,12 +5,12 @@
         <h1>Monthly Expenses</h1>
       </template>
       <template #content>
-        <Bar :options="chartOptions" :data="chartData" />
+        <Bar />
       </template>
     </Widget>
     <Widget :loading="!dataStore.isInitialized">
       <template #header>
-        <h1>Test</h1>
+        <h1>Your budget expenses</h1>
       </template>
       <template #content>
         <Doughnut :options="donutOptions" :data="chartData" />
@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import Widget from "@/components/ui/Widget.vue";
-import { Bar, Doughnut, Line } from "vue-chartjs";
+import { Doughnut, Line } from "vue-chartjs";
 import {
   Chart as ChartJS,
   Title,
@@ -59,6 +59,7 @@ import {
   PointElement,
 } from "chart.js";
 import { useDataStore } from "@/stores/dataStore";
+import Bar from "@/components/charts/Bar.vue";
 
 ChartJS.register(
   Title,
@@ -102,16 +103,6 @@ const chartData = ref({
       backgroundColor: ["#88C0D0", "#81A1C1", "#5E81AC"],
     },
   ],
-});
-const chartOptions = ref({
-  responsive: true,
-  maintainAspectRatio: true,
-  aspectRatio: 2,
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
 });
 
 const donutOptions = ref({

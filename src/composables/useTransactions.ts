@@ -1,15 +1,15 @@
 import { supabase } from '@/lib/supabase';
-import type { Expense, NewExpense } from '@/models/expense.model';
+import type { Transaction, NewTransaction } from '@/models/transaction.model';
 import { useAuthStore } from '@/stores/authStore';
 
-export function useExpenses() {
+export function useTransactions() {
   const authStore = useAuthStore();
 
-  async function getExpenses(): Promise<Expense[]> {
+  async function getTransactions(): Promise<Transaction[]> {
     try {
 
       const { data, error } = await supabase
-        .from("expenses")
+        .from("transactions")
         .select("*")
         .eq("user_id", authStore.currentUser!.id);
 
@@ -22,10 +22,10 @@ export function useExpenses() {
     }
   }
 
-  async function addExpense(expense: NewExpense) {
+  async function addTransaction(expense: NewTransaction) {
     try {
       const { data, error } = await supabase
-        .from("expenses")
+        .from("transactions")
         .insert([{ ...expense, user_id: authStore.currentUser!.id }]);
 
       if (error) throw error;
@@ -36,11 +36,11 @@ export function useExpenses() {
     }
   }
 
-  async function updateExpense(id: string, updatedExpense: Expense) {
+  async function updateTransaction(id: string, updatedTransaction: Transaction) {
     try {
       const { data, error } = await supabase
-        .from("expenses")
-        .update(updatedExpense)
+        .from("transactions")
+        .update(updatedTransaction)
         .eq("id", id)
         .eq("user_id", authStore.currentUser!.id);
 
@@ -52,10 +52,10 @@ export function useExpenses() {
     }
   }
 
-  async function deleteExpense(id: string) {
+  async function deleteTransaction(id: string) {
     try {
       const { data, error } = await supabase
-        .from("expenses")
+        .from("transactions")
         .delete()
         .eq("id", id)
         .eq("user_id", authStore.currentUser!.id);
@@ -69,9 +69,9 @@ export function useExpenses() {
   }
 
   return {
-    getExpenses,
-    addExpense,
-    updateExpense,
-    deleteExpense
+    getTransactions,
+    addTransaction,
+    updateTransaction,
+    deleteTransaction
   };
 }

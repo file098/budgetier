@@ -50,8 +50,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
-import { useExpenses } from "@/composables/useExpenses";
-import type { NewExpense, Category } from "@/models/expense.model";
+import { useTransactions } from "@/composables/useTransactions";
+import type { NewExpense, Category } from "@/models/transaction.model";
 
 const categories: Category[] = ["Personal", "Hobby", "Food", "Travel", "Work"];
 const isSubmitting = ref(false);
@@ -85,7 +85,7 @@ async function handleSubmit() {
   if (isSubmitting.value) return;
 
   isSubmitting.value = true;
-  const { addExpense } = useExpenses();
+  const { addExpense } = useTransactions();
 
   try {
     await addExpense(form.value);

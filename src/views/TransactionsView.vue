@@ -9,15 +9,12 @@
           @click.stop="toggleDetails(transaction.id)"
         >
           <span
-            :style="{
-              backgroundColor: '#88c0d0',
-              width: '10px',
-              height: '10px',
-              borderRadius: '50%',
-              display: 'inline-block',
-            }"
+            class="category-icon"
+            :style="{ backgroundColor: '#' + transaction.color }"
           ></span>
-          <span>{{ new Date(transaction.created_at).toLocaleDateString("en-GB") }}</span>
+          <span>{{
+            new Date(transaction.created_at).toLocaleDateString("en-GB")
+          }}</span>
           <span>{{ transaction.category }}</span>
           <span>{{ transaction.amount }}€</span>
           <div
@@ -38,14 +35,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { useExpenses } from "@/composables/useExpenses";
-import type { Expense } from "@/models/expense.model";
+import { useTransactions } from "@/composables/useTransactions";
 import TransactionDetail from "@/components/TransactionDetail.vue";
 import TransactionSkeleton from "@/components/ui/skeletons/TransactionSkeleton.vue";
+import type { Transaction } from "@/models/transaction.model";
 
-const transactions = ref<Expense[]>([]);
+const transactions = ref<Transaction[]>([]);
 const loading = ref(true);
-const { getExpenses } = useExpenses();
+const { getTransactions } = useTransactions();
 
 const expandedTransaction = ref<string | null>(null);
 
@@ -58,9 +55,10 @@ const closeDetails = () => {
 };
 
 const fetchTransactions = async () => {
-  transactions.value = await getExpenses();
+  transactions.value = await getTransactions();
   transactions.value.sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
   loading.value = false;
 };
@@ -77,7 +75,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-
 .transactions-container {
   width: 100%;
 
@@ -93,6 +90,13 @@ onUnmounted(() => {
       border-bottom: 1px solid #ccc;
       gap: 10px;
       cursor: pointer;
+
+      & .category-icon {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: block;
+      }
     }
   }
 }
@@ -104,7 +108,7 @@ onUnmounted(() => {
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.3s ease-in-out;
   overflow: hidden;
-  
+
   &.opened {
     grid-template-rows: 1fr;
   }
