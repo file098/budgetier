@@ -1,11 +1,11 @@
 <template>
-  <Bar :options="chartOptions" :data="chartData" />
+  <Chart type="bar" :data="chartData" :options="chartOptions" />
 </template>
 
 <script setup lang="ts">
 import { useDataStore } from "@/stores/dataStore";
 import { computed, ref } from "vue";
-import { Bar } from "vue-chartjs";
+import Chart from "primevue/chart";
 
 const dataStore = useDataStore();
 
@@ -31,7 +31,7 @@ const categoryValues = computed(() => {
 });
 
 const backgroundColor = computed(() =>
-  Array.from(new Set(dataStore.transactionList.map((tran) => "#" + tran.color)))
+  Array.from(new Set(dataStore.transactionList.map((tran) => "#ffffff")))
 );
 
 const chartData = ref({
