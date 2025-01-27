@@ -8,7 +8,7 @@
           v-slot="$form"
           :resolver="resolver"
           :initialValues
-          @submit="onFormSubmit"
+          @submit="onLoginFormSubmit"
           class="form"
         >
           <InputText name="email" type="text" placeholder="email" fluid />
@@ -19,12 +19,7 @@
             variant="simple"
             >{{ $form.email.error?.message }}</Message
           >
-          <InputText
-            name="password"
-            type="password"
-            placeholder="Password"
-            fluid
-          />
+          <Password name="password" placeholder="Password" :feedback="false" fluid toggleMask />
           <Message
             v-if="$form.password?.invalid"
             severity="error"
@@ -32,6 +27,11 @@
             variant="simple"
             >{{ $form.password.error?.message }}</Message
           >
+          <div class="register-section">
+            <span>Don't have an account?</span>
+            <span id="register-button" @click=""> Register here!</span>
+          </div>
+
           <Button type="submit" severity="secondary" label="Submit" />
         </Form>
       </template>
@@ -48,10 +48,12 @@ import InputText from "primevue/inputtext";
 import Message from "primevue/message";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import Password from "primevue/password";
 
 const router = useRouter();
 
 const loading = ref(false);
+const register = ref(false);
 
 const initialValues = ref({
   email: "",
@@ -79,7 +81,7 @@ const resolver = (form: any) => {
   };
 };
 
-const onFormSubmit = (form: any) => {
+const onLoginFormSubmit = (form: any) => {
   if (form.valid) {
     handleLogin(form.values.email, form.values.password);
   }
@@ -171,6 +173,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
+@use "@/assets/styles/colors" as *;
+
 .background-canvas {
   position: absolute;
   top: 0;
@@ -193,6 +197,23 @@ section {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    & .register-section {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: row;
+      gap: 0.5rem;
+
+      #register-button {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover {
+          text-decoration: underline;
+          color: $primary;
+        }
+      }
+    }
   }
 }
 </style>

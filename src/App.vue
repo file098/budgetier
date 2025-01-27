@@ -6,22 +6,22 @@
       <h2>Add Expense</h2>
     </template>
     <template #body>
-      <ExpenseForm />
+      <TransactionForm />
     </template>
   </Dialog>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { supabase } from "@/lib/supabase";
-import { useAuthStore } from "@/stores/authStore";
-import { useAppStore } from "@/stores/appStore";
-import { useDataStore } from "@/stores/dataStore";
-import { useInitialize } from "@/composables/useInitialize";
-import { useRoute } from "vue-router";
-import Header from "@/layout/Header.vue";
 import Dialog from "@/components/ui/Dialog.vue";
-import ExpenseForm from "@/components/ExpenseForm.vue";
+import { useInitialize } from "@/composables/useInitialize";
+import Header from "@/layout/Header.vue";
+import { supabase } from "@/lib/supabase";
+import { useAppStore } from "@/stores/appStore";
+import { useAuthStore } from "@/stores/authStore";
+import { useDataStore } from "@/stores/dataStore";
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+import TransactionForm from "./components/TransactionForm.vue";
 
 const authStore = useAuthStore();
 const appStore = useAppStore();
