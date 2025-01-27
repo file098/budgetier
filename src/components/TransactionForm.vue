@@ -62,9 +62,13 @@ import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
 import InputNumber from "primevue/inputnumber";
+import { useTransactions } from "@/composables/useTransactions";
+import { useAppStore } from "@/stores/appStore";
 
 const toast = useToast();
 const dataStore = useDataStore();
+const appStore = useAppStore();
+const transactions = useTransactions();
 
 const initialValues = ref({
   date: new Date(),
@@ -98,13 +102,21 @@ const resolver = (form: any) => {
   };
 };
 
-const onFormSubmit = (form: any) => {
+const onFormSubmit = async (form: any) => {
   if (form.valid) {
-    toast.add({
-      severity: "success",
-      summary: "Form Submitted",
-      detail: `${form.values.description} - ${form.values.amount}€ - ${form.values.category} - ${form.values.date}`,
-    });
+    try {
+      await transactions.addTransaction(form.values);
+      appStore.addExpenseDialogOpen = false;
+      toast.add({
+        severity: "success",
+        summary: "Form Submitted",
+        detail: `${form.values.description} - ${form.values.amount}€ - ${form.values.category} - ${form.values.date}`,
+      });
+    } catch {
+      console.error("Error submitting form", form.values);
+    } finally {
+      form.reset();
+    }
   }
 };
 </script>

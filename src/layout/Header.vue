@@ -8,6 +8,7 @@
       <router-link to="/report" class="nav-link">Reports</router-link>
     </nav>
     <div class="buttons">
+      <Button icon="pi pi-user" rounded @click=""/>
       <Button icon="pi pi-plus" rounded @click="appStore.addExpenseDialogOpen = true" />
     </div>
   </header>
@@ -16,7 +17,7 @@
 <script setup lang="ts">
 import { useAppStore } from "@/stores/appStore";
 import { useAuthStore } from "@/stores/authStore";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { Button } from "primevue";
 
 const authStore = useAuthStore();
